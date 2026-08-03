@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v9
+      - uses: astral-sh/setup-uv@v7
       - run: uv sync --locked
       - run: uv run ruff check
       - run: uv run ruff format --check
@@ -38,7 +38,7 @@ jobs:
           sudo apt-get update
           sudo ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql18
 
-      - uses: astral-sh/setup-uv@v9
+      - uses: astral-sh/setup-uv@v7
       - run: uv sync --locked
 
       # The same two commands the README tells a human to run.
