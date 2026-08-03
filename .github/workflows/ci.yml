@@ -29,8 +29,10 @@ jobs:
 
       - name: Install Microsoft ODBC Driver 18
         run: |
+          # --batch --yes: the runner image ships this keyring already, and
+          # gpg's overwrite prompt has no tty to ask on.
           curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
-            | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+            | sudo gpg --dearmor --batch --yes -o /usr/share/keyrings/microsoft-prod.gpg
           echo "deb [signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" \
             | sudo tee /etc/apt/sources.list.d/mssql-release.list
           sudo apt-get update
