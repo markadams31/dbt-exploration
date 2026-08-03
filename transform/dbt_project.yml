@@ -1,0 +1,46 @@
+# The dbt project. `shop` is the business it models, not the tool.
+name: shop
+version: "1.0.0"
+profile: shop
+
+flags:
+  # Adapter behaviour flags, opted into the announced future defaults on
+  # purpose rather than silencing the warnings and hoping:
+  #   native string types: NVARCHAR(4000)/VARCHAR(MAX) instead of the
+  #     legacy VARCHAR(8000) mappings
+  #   dbt transactions: real BEGIN/COMMIT TRANSACTION instead of
+  #     autocommit-per-statement with no rollback
+  #   safe type expansion: lets dbt widen column types via ALTER COLUMN
+  #     (notebook 02 explains it; notebook 05 lands a widening on purpose)
+  dbt_sqlserver_use_native_string_types: true
+  dbt_sqlserver_use_dbt_transactions: true
+  dbt_sqlserver_enable_safe_type_expansion: true
+  send_anonymous_usage_stats: false
+
+model-paths: ["models"]
+snapshot-paths: ["snapshots"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+
+models:
+  shop:
+    staging:
+      # Views: staging is renaming and typing, not storage.
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    marts:
+      # Tables: marts are what analysts hit; they pay for storage once.
+      +materialized: table
+      +schema: marts
+
+snapshots:
+  shop:
+    +schema: snapshots
+
+seeds:
+  shop:
+    +schema: staging

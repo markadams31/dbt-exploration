@@ -1,0 +1,19 @@
+# Committed on purpose: these are throwaway credentials for a local container
+# holding synthetic data, so cloning and running just works. In production this
+# file never enters git; dbt reads it from ~/.dbt/ or the environment.
+shop:
+  target: dev
+  outputs:
+    dev:
+      type: sqlserver
+      driver: "ODBC Driver 18 for SQL Server"
+      server: 127.0.0.1
+      port: 14330  # compose maps this to the container's 1433; see docker-compose.yml
+      database: warehouse
+      schema: marts
+      user: transformer
+      password: "Localdev_2024!"
+      # Local container speaks TLS with a self-signed cert; trust it here only.
+      encrypt: true
+      trust_cert: true
+      threads: 4

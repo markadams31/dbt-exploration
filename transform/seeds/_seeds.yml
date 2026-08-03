@@ -1,0 +1,13 @@
+version: 2
+
+seeds:
+  - name: au_states
+    description: >
+      Static reference data that belongs in git, not in a source system:
+      Australian state codes to names and regions. Loaded by `dbt seed`.
+    config:
+      column_types:
+        state_code: char(3)
+    columns:
+      - name: state_code
+        data_tests: [unique, not_null]

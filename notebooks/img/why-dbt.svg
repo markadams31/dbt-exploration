@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="360" viewBox="0 0 920 360" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12">
+  <!-- Opaque canvas: renders identically on light and dark GitHub themes. -->
+  <rect width="920" height="360" fill="#ffffff" rx="6"/>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#59636e"/>
+    </marker>
+    <marker id="abig" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0969da"/>
+    </marker>
+  </defs>
+
+  <!-- ── LEFT: what you write ───────────────────────────────────────── -->
+  <text x="26" y="28" fill="#1f2328" font-weight="bold" font-size="13">You write files</text>
+  <text x="26" y="46" fill="#59636e">in any order · nothing records which runs first</text>
+
+  <rect x="20" y="58" width="392" height="282" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+
+  <g stroke="#d1d9e0" fill="#ffffff">
+    <rect x="36" y="74"  width="360" height="52" rx="4"/>
+    <rect x="36" y="140" width="360" height="52" rx="4"/>
+    <rect x="36" y="206" width="360" height="52" rx="4"/>
+    <rect x="36" y="272" width="360" height="52" rx="4"/>
+  </g>
+
+  <g fill="#1f2328">
+    <text x="50" y="93">fct_orders.sql</text>
+    <text x="50" y="159">stg_shop__products.sql</text>
+    <text x="50" y="225">int_orders__enriched.sql</text>
+    <text x="50" y="291">stg_shop__orders.sql</text>
+  </g>
+  <!-- the ref()/source() calls are the whole point: coloured, everything else muted -->
+  <g fill="#59636e">
+    <text x="50" y="113">from <tspan fill="#0969da" font-weight="bold">ref('int_orders__enriched')</tspan></text>
+    <text x="50" y="179">from <tspan fill="#8250df" font-weight="bold">source('shop', 'products')</tspan></text>
+    <text x="50" y="245">from <tspan fill="#0969da" font-weight="bold">ref('stg_shop__orders')</tspan> …</text>
+    <text x="50" y="311">from <tspan fill="#8250df" font-weight="bold">source('shop', 'orders')</tspan></text>
+  </g>
+
+  <!-- ── the derivation ─────────────────────────────────────────────── -->
+  <line x1="424" y1="199" x2="492" y2="199" stroke="#0969da" stroke-width="2" marker-end="url(#abig)"/>
+  <text x="458" y="190" text-anchor="middle" fill="#0969da" font-size="11" font-weight="bold">dbt reads</text>
+  <text x="458" y="219" text-anchor="middle" fill="#0969da" font-size="11">those calls</text>
+
+  <!-- ── RIGHT: the graph that falls out ────────────────────────────── -->
+  <text x="510" y="28" fill="#1f2328" font-weight="bold" font-size="13">and derives the build order</text>
+  <text x="510" y="46" fill="#59636e">nobody maintains a run-this-first list</text>
+
+  <rect x="504" y="58" width="396" height="282" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+
+  <!-- sources -->
+  <g stroke="#8250df" fill="#fbefff">
+    <rect x="522" y="84" width="130" height="26" rx="4"/>
+    <rect x="682" y="84" width="130" height="26" rx="4"/>
+  </g>
+  <g fill="#1f2328" font-size="10">
+    <text x="587" y="101" text-anchor="middle">raw.orders</text>
+    <text x="747" y="101" text-anchor="middle">raw.products</text>
+  </g>
+
+  <!-- staging -->
+  <g stroke="#0969da" fill="#ddf4ff">
+    <rect x="522" y="140" width="130" height="26" rx="4"/>
+    <rect x="682" y="140" width="130" height="26" rx="4"/>
+  </g>
+  <g fill="#1f2328" font-size="10">
+    <text x="587" y="157" text-anchor="middle">stg_shop__orders</text>
+    <text x="747" y="157" text-anchor="middle">stg_shop__products</text>
+  </g>
+
+  <!-- intermediate -->
+  <g stroke="#0969da" fill="#ddf4ff">
+    <rect x="602" y="200" width="130" height="26" rx="4"/>
+  </g>
+  <text x="667" y="217" text-anchor="middle" fill="#1f2328" font-size="10">int_orders__enriched</text>
+
+  <!-- mart -->
+  <g stroke="#116329" fill="#dafbe1">
+    <rect x="602" y="260" width="130" height="26" rx="4"/>
+  </g>
+  <text x="667" y="277" text-anchor="middle" fill="#1f2328" font-size="10">fct_orders</text>
+
+  <!-- edges: no line crosses a node -->
+  <g stroke="#59636e" fill="none" marker-end="url(#a)">
+    <line x1="587" y1="110" x2="587" y2="137"/>
+    <line x1="747" y1="110" x2="747" y2="137"/>
+    <line x1="596" y1="166" x2="641" y2="197"/>
+    <line x1="738" y1="166" x2="693" y2="197"/>
+    <line x1="667" y1="226" x2="667" y2="257"/>
+  </g>
+
+  <text x="702" y="318" text-anchor="middle" fill="#59636e" font-size="10">staging first (either order) → intermediate → marts</text>
+</svg>

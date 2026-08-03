@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: stg_shop__customers
+    description: Customers, typed and renamed. Cents became dollars here.
+    columns:
+      - name: customer_id
+        description: Natural key from the operational system.
+        data_tests: [unique, not_null]
+      - name: segment
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [retail, wholesale, trade]
+
+  - name: stg_shop__products
+    description: The catalogue, typed and renamed.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+      - name: sku
+        data_tests: [unique, not_null]
+
+  - name: stg_shop__orders
+    description: Orders, typed and renamed. `loaded_at` is the loader's clock.
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [placed, shipped, delivered, cancelled]
+      - name: customer_id
+        description: Every order must belong to a customer we know about.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_shop__customers')
+                field: customer_id
+      - name: quantity
+        data_tests: [not_null]
+
+  - name: stg_shop__payments
+    description: Payments, typed and renamed. Instalments are normal.
+    columns:
+      - name: payment_id
+        data_tests: [unique, not_null]
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_shop__orders')
+                field: order_id
+      - name: method
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [card, bank_transfer, paypal]

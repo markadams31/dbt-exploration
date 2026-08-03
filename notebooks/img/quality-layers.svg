@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="330" viewBox="0 0 920 330" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12">
+  <!-- Opaque canvas: renders identically on light and dark GitHub themes. -->
+  <rect width="920" height="330" fill="#ffffff" rx="6"/>
+
+  <defs>
+    <marker id="q" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#59636e"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="28" fill="#1f2328" font-weight="bold" font-size="13">Four guards, four different moments</text>
+  <text x="24" y="46" fill="#59636e">each one checks a different thing, and is blind to the others</text>
+
+  <!-- the timeline of a change reaching production -->
+  <line x1="120" y1="120" x2="850" y2="120" stroke="#59636e" stroke-width="2" marker-end="url(#q)"/>
+  <g stroke="#59636e">
+    <line x1="220" y1="114" x2="220" y2="126"/>
+    <line x1="470" y1="114" x2="470" y2="126"/>
+    <line x1="720" y1="114" x2="720" y2="126"/>
+  </g>
+  <g fill="#1f2328" font-size="10" text-anchor="middle" font-weight="bold">
+    <text x="220" y="106">you edit SQL</text>
+    <text x="470" y="106">dbt build runs</text>
+    <text x="720" y="106">data has landed</text>
+  </g>
+  <text x="862" y="124" fill="#59636e" font-size="10">time</text>
+
+  <!-- unit tests -->
+  <rect x="120" y="146" width="200" height="70" rx="5" fill="#fbefff" stroke="#8250df"/>
+  <text x="220" y="167" text-anchor="middle" fill="#1f2328" font-size="11" font-weight="bold">unit tests</text>
+  <text x="220" y="184" text-anchor="middle" fill="#59636e" font-size="9">checks: your transformation logic</text>
+  <text x="220" y="198" text-anchor="middle" fill="#59636e" font-size="9">against fixture rows you wrote</text>
+  <text x="220" y="211" text-anchor="middle" fill="#8250df" font-size="9">blind to real data</text>
+  <line x1="220" y1="142" x2="220" y2="128" stroke="#8250df" stroke-dasharray="3 2"/>
+
+  <!-- contracts -->
+  <rect x="360" y="146" width="220" height="70" rx="5" fill="#fff8c5" stroke="#bf8700"/>
+  <text x="470" y="167" text-anchor="middle" fill="#1f2328" font-size="11" font-weight="bold">contracts</text>
+  <text x="470" y="184" text-anchor="middle" fill="#59636e" font-size="9">checks: the model's shape</text>
+  <text x="470" y="198" text-anchor="middle" fill="#59636e" font-size="9">columns and types, before building</text>
+  <text x="470" y="211" text-anchor="middle" fill="#bf8700" font-size="9">blind to values</text>
+  <line x1="470" y1="142" x2="470" y2="128" stroke="#bf8700" stroke-dasharray="3 2"/>
+
+  <!-- data tests -->
+  <rect x="620" y="146" width="200" height="70" rx="5" fill="#ddf4ff" stroke="#0969da"/>
+  <text x="720" y="167" text-anchor="middle" fill="#1f2328" font-size="11" font-weight="bold">data tests</text>
+  <text x="720" y="184" text-anchor="middle" fill="#59636e" font-size="9">checks: the rows that landed</text>
+  <text x="720" y="198" text-anchor="middle" fill="#59636e" font-size="9">generic per column · singular in SQL</text>
+  <text x="720" y="211" text-anchor="middle" fill="#0969da" font-size="9">blind to what nobody declared</text>
+  <line x1="720" y1="142" x2="720" y2="128" stroke="#0969da" stroke-dasharray="3 2"/>
+
+  <!-- freshness: the fourth moment sits off the timeline — it fires on request -->
+  <rect x="620" y="234" width="200" height="68" rx="5" fill="#f6f8fa" stroke="#59636e"/>
+  <text x="720" y="254" text-anchor="middle" fill="#1f2328" font-size="11" font-weight="bold">source freshness</text>
+  <text x="720" y="270" text-anchor="middle" fill="#59636e" font-size="9">checks: the loader's clock</text>
+  <text x="720" y="283" text-anchor="middle" fill="#59636e" font-size="9">fires: whenever you ask</text>
+  <text x="720" y="296" text-anchor="middle" fill="#59636e" font-size="9">blind to the content of what loaded</text>
+
+  <text x="300" y="264" fill="#1f2328" font-size="11" font-weight="bold">The gap this series is about:</text>
+  <text x="300" y="282" fill="#59636e" font-size="10">nothing here watches row counts,</text>
+  <text x="300" y="296" fill="#59636e" font-size="10">value ranges, or whether any of this ran at all.</text>
+
+  <text x="460" y="320" text-anchor="middle" fill="#59636e" font-size="10">
+    part 5 measures exactly how much gets through anyway
+  </text>
+</svg>

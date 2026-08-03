@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="430" viewBox="0 0 920 430" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12">
+  <!-- Opaque canvas: renders identically on light and dark GitHub themes. -->
+  <rect width="920" height="430" fill="#ffffff" rx="6"/>
+
+  <defs>
+    <marker id="tick" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#59636e"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="28" fill="#1f2328" font-weight="bold" font-size="13">One order, two clocks</text>
+  <text x="24" y="46" fill="#59636e">order #31 happened on the 20th, but only reached the warehouse on the 30th</text>
+
+  <!-- ── timeline 1: event time ─────────────────────────────────────── -->
+  <text x="24" y="92" fill="#1f2328" font-weight="bold" font-size="11">placed_at</text>
+  <text x="24" y="107" fill="#59636e" font-size="10">when it happened</text>
+
+  <line x1="150" y1="100" x2="850" y2="100" stroke="#59636e" marker-end="url(#tick)"/>
+  <g stroke="#59636e" stroke-width="1">
+    <line x1="180" y1="96" x2="180" y2="104"/>
+    <line x1="320" y1="96" x2="320" y2="104"/>
+    <line x1="460" y1="96" x2="460" y2="104"/>
+    <line x1="600" y1="96" x2="600" y2="104"/>
+    <line x1="740" y1="96" x2="740" y2="104"/>
+  </g>
+  <g fill="#59636e" font-size="9" text-anchor="middle">
+    <text x="180" y="120">20 Jul</text>
+    <text x="320" y="120">23 Jul</text>
+    <text x="460" y="120">26 Jul</text>
+    <text x="600" y="120">28 Jul</text>
+    <text x="740" y="120">30 Jul</text>
+  </g>
+
+  <!-- on-time orders -->
+  <g fill="#0969da">
+    <circle cx="320" cy="100" r="6"/>
+    <circle cx="460" cy="100" r="6"/>
+    <circle cx="600" cy="100" r="6"/>
+  </g>
+  <!-- the late order, at its event time -->
+  <circle cx="180" cy="100" r="7" fill="#cf222e"/>
+  <text x="180" y="82" text-anchor="middle" fill="#cf222e" font-size="10" font-weight="bold">order #31</text>
+
+  <!-- event-time watermark -->
+  <line x1="600" y1="66" x2="600" y2="134" stroke="#bf8700" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="612" y="72" fill="#bf8700" font-size="10" font-weight="bold">high-water mark</text>
+  <text x="612" y="85" fill="#bf8700" font-size="9">max(placed_at) already loaded</text>
+
+  <!-- box starts right of x≈195 so the "ten days late" arc drops past its left edge -->
+  <rect x="195" y="140" width="405" height="26" rx="4" fill="#ffebe9" stroke="#cf222e"/>
+  <text x="397" y="157" text-anchor="middle" fill="#82071e" font-size="10">
+    order #31 sits BELOW the mark → filtered out → never loaded, ever
+  </text>
+
+  <!-- ── timeline 2: arrival time ───────────────────────────────────── -->
+  <text x="24" y="252" fill="#1f2328" font-weight="bold" font-size="11">_loaded_at</text>
+  <text x="24" y="267" fill="#59636e" font-size="10">when it arrived</text>
+
+  <line x1="150" y1="260" x2="850" y2="260" stroke="#59636e" marker-end="url(#tick)"/>
+  <g stroke="#59636e" stroke-width="1">
+    <line x1="180" y1="256" x2="180" y2="264"/>
+    <line x1="320" y1="256" x2="320" y2="264"/>
+    <line x1="460" y1="256" x2="460" y2="264"/>
+    <line x1="600" y1="256" x2="600" y2="264"/>
+    <line x1="740" y1="256" x2="740" y2="264"/>
+  </g>
+  <g fill="#59636e" font-size="9" text-anchor="middle">
+    <text x="180" y="280">20 Jul</text>
+    <text x="320" y="280">23 Jul</text>
+    <text x="460" y="280">26 Jul</text>
+    <text x="600" y="280">28 Jul</text>
+    <text x="740" y="280">30 Jul</text>
+  </g>
+
+  <g fill="#0969da">
+    <circle cx="326" cy="260" r="6"/>
+    <circle cx="606" cy="260" r="6"/>
+    <circle cx="670" cy="260" r="6"/>
+  </g>
+  <circle cx="740" cy="260" r="7" fill="#1a7f37"/>
+  <text x="740" y="242" text-anchor="middle" fill="#1a7f37" font-size="10" font-weight="bold">order #31</text>
+
+  <line x1="670" y1="226" x2="670" y2="294" stroke="#bf8700" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="658" y="232" text-anchor="end" fill="#bf8700" font-size="10" font-weight="bold">high-water mark</text>
+  <text x="658" y="245" text-anchor="end" fill="#bf8700" font-size="9">max(loaded_at) already loaded</text>
+
+  <rect x="150" y="300" width="700" height="26" rx="4" fill="#dafbe1" stroke="#1a7f37"/>
+  <text x="500" y="317" text-anchor="middle" fill="#116329" font-size="10">
+    order #31 sits ABOVE the mark → picked up on the very next run
+  </text>
+
+  <!-- the gap -->
+  <!-- dives left of the callout box, then glides under the high-water label -->
+  <path d="M 180 108 C 110 170, 220 262, 740 252" stroke="#cf222e" stroke-width="1.5"
+        stroke-dasharray="5 4" fill="none"/>
+  <text x="370" y="224" text-anchor="middle" fill="#cf222e" font-size="10" font-weight="bold">
+    ten days late
+  </text>
+
+  <text x="460" y="368" text-anchor="middle" fill="#1f2328" font-size="11">
+    An incremental model must ask <tspan font-weight="bold">"what arrived since my last run?"</tspan>
+  </text>
+  <text x="460" y="386" text-anchor="middle" fill="#59636e" font-size="11">
+    not <tspan font-style="italic">"what happened since the newest thing I have?"</tspan>
+  </text>
+  <text x="460" y="410" text-anchor="middle" fill="#59636e" font-size="10">
+    an event's timestamp never climbs back above the mark: a missed row is missed permanently
+  </text>
+</svg>

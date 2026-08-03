@@ -1,0 +1,18 @@
+# SCD2 history for a source that overwrites itself. Each run compares what
+# the source says now against the latest known version of each row; changed
+# rows get a new version, superseded ones get a dbt_valid_to.
+#
+# strategy: timestamp trusts the source's updated_at completely. Cheap, and
+# exactly as reliable as upstream's discipline. Notebook 03 tests that trust.
+#
+# hard_deletes: new_record. When a customer vanishes upstream, close their
+# last version and append a tombstone row (dbt_is_deleted = 'True'). The
+# default ('ignore') would keep deleted customers alive forever.
+snapshots:
+  - name: customers_snapshot
+    relation: source('shop', 'customers')
+    config:
+      unique_key: customer_id
+      strategy: timestamp
+      updated_at: updated_at
+      hard_deletes: new_record

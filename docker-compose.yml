@@ -1,0 +1,38 @@
+name: dbt-exploration
+
+services:
+  # The warehouse: one SQL Server holds both the raw landing zone and every
+  # schema dbt builds. dbt transforms *inside* the warehouse, so unlike an
+  # extract-and-load stack there is nothing else to run.
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    # https://www.microsoft.com/en-us/legal/eula (Developer edition, non-production use).
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Localdev_2024!"
+      MSSQL_PID: "Developer"
+      MSSQL_MEMORY_LIMIT_MB: "1536"
+    ports:
+      # Non-default host port on purpose: machines that run dbt against SQL
+      # Server tend to already have a SQL Server on 1433. This lab stays out
+      # of its way.
+      - "127.0.0.1:14330:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+      - ./docker/mssql:/lab-init:ro
+    entrypoint: ["/bin/bash", "/lab-init/entrypoint.sh"]
+    healthcheck:
+      # Healthy only once the raw landing zone is seeded, not merely when the
+      # server answers. Notebooks assume raw.* exists the moment setup returns.
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -d warehouse -Q 'SELECT TOP 1 1 FROM raw.customers'"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+volumes:
+  mssql-data:

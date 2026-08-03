@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: int_orders__enriched
+    description: >
+      Orders joined to the products they sold, one row per order.
+      Still order grain: the join must never fan out.
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]

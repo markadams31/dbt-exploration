@@ -1,0 +1,24 @@
+# Local agent notes; not part of the published repo
+CLAUDE.md
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# dbt working state: regenerated on every invocation, cleared by `uv run reset`
+transform/target/
+transform/logs/
+transform/dbt_packages/
+.user.yml
+logs/
+
+# Jupyter autosave copies
+.ipynb_checkpoints/
+
+# notebook-written model variants: created live, cleared by `uv run reset`
+transform/models/scratch/
+transform/snapshots/scratch/

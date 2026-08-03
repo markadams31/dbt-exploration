@@ -1,0 +1,52 @@
+# Two jobs. `lint` is the cheap style gate. `notebooks` is the real test
+# suite: it stands up a fresh SQL Server and re-executes every notebook;
+# each one is full of assertions, so any drift in dbt's behaviour (or a
+# broken claim in the prose's code) fails the build loudly.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --locked
+      - run: uv run ruff check
+      - run: uv run ruff format --check
+
+  notebooks:
+    # Pinned (not ubuntu-latest) so the ODBC repo path below always matches
+    # the runner's release.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Microsoft ODBC Driver 18
+        run: |
+          curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
+            | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+          echo "deb [signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" \
+            | sudo tee /etc/apt/sources.list.d/mssql-release.list
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql18
+
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --locked
+
+      # The same two commands the README tells a human to run.
+      - run: uv run setup
+      - run: uv run check
+
+      - name: Execute every notebook
+        run: |
+          for nb in notebooks/*.ipynb; do
+            echo "::group::$nb"
+            uv run jupyter nbconvert --execute --to notebook --stdout "$nb" > /dev/null
+            echo "::endgroup::"
+          done

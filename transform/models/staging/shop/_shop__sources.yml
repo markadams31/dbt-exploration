@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: shop
+    description: >
+      The raw landing zone. An EL pipeline lands these tables hourly from the
+      shop's operational database; dbt's work starts here and never writes back.
+    database: warehouse
+    schema: raw
+    tables:
+      - name: customers
+        description: >
+          One row per customer, overwritten in place; the operational system
+          keeps no history. Remembering yesterday is the snapshot's job.
+      - name: products
+        description: The catalogue. unit_price_cents moves without ceremony.
+      - name: orders
+        description: One row per order, updated in place as status changes.
+        loaded_at_field: _loaded_at
+        freshness:
+          warn_after: { count: 24, period: hour }
+          error_after: { count: 48, period: hour }
+      - name: payments
+        description: Payments against orders; an order may pay in instalments.
+        loaded_at_field: _loaded_at

@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      One row per order, incrementally maintained. The models downstream trust
+      this table completely, which is exactly what notebook 02 examines.
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: line_total
+        data_tests: [not_null]
+
+  - name: dim_customers
+    description: Customers as the source knows them today, with state names.
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+
+  - name: fct_daily_revenue
+    description: >
+      Daily order count and revenue (cancelled orders excluded). Carries an
+      enforced contract: dbt refuses to build it if the columns drift from
+      the shape promised here; the BI layer depends on it.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: order_date
+        data_type: date
+        constraints:
+          - type: not_null
+        data_tests: [unique]
+      - name: orders_placed
+        data_type: int
+      - name: revenue
+        data_type: decimal(14,2)
+
+unit_tests:
+  - name: cancelled_orders_earn_nothing
+    description: >
+      The revenue rule in one sentence: cancelled orders count as orders but
+      never as revenue. Runs against fixture rows; no warehouse data needed.
+    model: fct_daily_revenue
+    given:
+      - input: ref('fct_orders')
+        rows:
+          - { order_id: 1, status: delivered, line_total: 100.00, placed_at: 2026-07-01 09:00:00 }
+          - { order_id: 2, status: cancelled, line_total: 449.00, placed_at: 2026-07-01 10:00:00 }
+    expect:
+      rows:
+        - { order_date: 2026-07-01, orders_placed: 2, revenue: 100.00 }
