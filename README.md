@@ -1,6 +1,6 @@
 # dbt-exploration
 
-[![ci](https://github.com/markadams31/dbt-exploration/actions/workflows/ci.yml/badge.svg)](https://github.com/markadams31/dbt-exploration/actions/workflows/ci.yml)
+[![ci](https://github.com/markadams31/dbt-exploration/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/markadams31/dbt-exploration/actions/workflows/ci.yml)
 
 dbt (data build tool) turns raw warehouse data into trusted, tested data
 assets, with every transformation captured as version-controlled code a team
